@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mini-Broker Dashboard</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: #e0e0e0; margin: 0; padding: 20px; }
+        h2 { border-bottom: 2px solid #333; padding-bottom: 10px; color: #4caf50; }
+        #logs { background: #1e1e1e; border-radius: 8px; height: 500px; overflow-y: auto; padding: 15px; list-style: none; font-family: monospace; border: 1px solid #333; }
+        .log-item { padding: 8px 0; border-bottom: 1px solid #2a2a2a; border-left: 3px solid #4caf50; padding-left: 10px; margin-bottom: 5px; }
+        .time { color: #888; margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <h2>🚀 MINI-BROKER MONITOR</h2>
+    <div id="status">연결 확인 중...</div>
+    <ul id="logs"></ul>
+    <script>
+        const logList = document.getElementById('logs');
+        const ws = new WebSocket("ws://" + location.host + "/ws");
+        ws.onopen = () => document.getElementById('status').innerText = "✅ ONLINE";
+        ws.onmessage = (e) => {
+            const li = document.createElement('li');
+            li.className = 'log-item';
+            li.innerHTML = `<span class="time">${new Date().toLocaleTimeString()}</span> ${e.data}`;
+            logList.prepend(li);
+        };
+    </script>
+</body>
+</html>
